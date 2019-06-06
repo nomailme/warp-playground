@@ -14,6 +14,8 @@ RUN dotnet restore WarpExample.sln
 
 RUN dotnet publish src/WarpExample/WarpExample.csproj --framework netcoreapp2.2 -c Release -o /app/out/linux-x64 /p:Version=${version} -r linux-x64
 
+RUN dotnet publish src/WarpExample/WarpExample.csproj --framework netcoreapp2.2 -c Release -o /app/out/win10-x64 /p:Version=${version} -r win10-x64
+
 # pack and squeeze
 
 RUN curl -Lo warp-packer https://github.com/dgiagio/warp/releases/download/v0.3.0/linux-x64.warp-packer && chmod +x warp-packer
@@ -21,4 +23,6 @@ RUN curl -Lo warp-packer https://github.com/dgiagio/warp/releases/download/v0.3.
 RUN chmod +x warp-packer
 
 RUN ./warp-packer --arch linux-x64 --input_dir /app/out/linux-x64 --exec warp-example --output out/warp-example
+
+RUN ./warp-packer --arch windows-x64 --input_dir /app/out/win10-x64 --exec warp-example.exe --output out/warp-example.exe
 
